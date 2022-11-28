@@ -1,2 +1,2 @@
 # Ticket_parser
-Programm for finding cheap tickets for plane
+Programm for finding cheap plane tickets
