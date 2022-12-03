@@ -7,7 +7,10 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service as ChromeService
 from useful_funcs import form_dictionary, show_ticket_dict, get_date_for_url, generate_graph_from_dict
 
-exclude_list = ('Багаж', 'TOF', 'S7', 'UUD', '|', '+', 'Самый', 'Выбрать', 'цене', 'Без', 'Ред')
+from_city = input("Пожалуйста, введите название города вылета в авиаформате (MOW - Москва, TOF - Томск)").upper()
+to_city = input("Пожалуйста, введите название города назначения в авиаформате (MOW - Москва, TOF - Томск)").upper()
+
+exclude_list = ('Багаж', from_city, 'S7', to_city, '|', '+', 'Самый', 'Выбрать', 'цене', 'Без', 'Ред')
 
 
 def parse_to_files(url, result_file):
@@ -59,7 +62,7 @@ def start_parse():
         date = get_date_for_url(i)
         filename = f'{str(datetime.datetime.today()).split()[0]}_{current_time}_for_{date[:2]}.{date[2:]}.txt'
         try:
-            parse_to_files(f'https://www.aviasales.ru/search/TOF{date}UUD1?request_source=expired_search', filename)
+            parse_to_files(f'https://www.aviasales.ru/search/{from_city}{date}{to_city}1?request_source=expired_search', filename)
         except:
             pass
         time.sleep(1)
@@ -69,11 +72,13 @@ def start_parse():
 
 
 def main():
-    schedule.every().day.at('00:34').do(start_parse)
-    schedule.every().day.at('00:37').do(start_parse)
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
+    start_parse()
+    show_ticket_dict(form_dictionary())
+    # schedule.every().day.at('00:34').do(start_parse)
+    # schedule.every().day.at('00:37').do(start_parse)
+    # while True:
+    #     schedule.run_pending()
+    #     time.sleep(1)
 
 
 if __name__ == "__main__":
