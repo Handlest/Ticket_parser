@@ -7,8 +7,11 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service as ChromeService
 from useful_funcs import form_dictionary, show_ticket_dict, get_date_for_url, generate_graph_from_dict
 
-from_city = input("Пожалуйста, введите название города вылета в авиаформате (MOW - Москва, TOF - Томск)").upper()
-to_city = input("Пожалуйста, введите название города назначения в авиаформате (MOW - Москва, TOF - Томск)").upper()
+# from_city = input("Пожалуйста, введите название города вылета в авиаформате (MOW - Москва, TOF - Томск)").upper()
+# to_city = input("Пожалуйста, введите название города назначения в авиаформате (MOW - Москва, TOF - Томск)").upper()
+
+from_city = "TOF"
+to_city = "UUD"
 
 exclude_list = ('Багаж', from_city, 'S7', to_city, '|', '+', 'Самый', 'Выбрать', 'цене', 'Без', 'Ред')
 
@@ -18,7 +21,7 @@ def parse_to_files(url, result_file):
     options.add_argument("--disable-blink-features=AutomationControlled")  # Disable web-driver mode
     options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)"
                          " Chrome/96.0.4664.110 Safari/537.36")
-    options.add_argument('--headless')
+    # options.add_argument('--headless')
     driver = webdriver.Chrome(options=options, service=ChromeService(ChromeDriverManager().install()), service_log_path='/dev/NULL')
 
     driver.implicitly_wait(15)
@@ -72,8 +75,10 @@ def start_parse():
 
 
 def main():
-    start_parse()
+    #start_parse()
     show_ticket_dict(form_dictionary())
+    generate_graph_from_dict(form_dictionary())
+
     # schedule.every().day.at('00:34').do(start_parse)
     # schedule.every().day.at('00:37').do(start_parse)
     # while True:

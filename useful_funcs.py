@@ -1,5 +1,6 @@
 import pathlib
 import datetime
+import matplotlib.pyplot as plt
 
 
 def show_ticket_dict(dictionary):
@@ -74,4 +75,20 @@ def get_date_for_url(offset_from_today: int):
 
 
 def generate_graph_from_dict(dictionary: dict):
-    pass
+    lists_of_tickets = []
+    for date, info in dictionary.items():
+        lists_of_tickets.append(info)
+    list_of_prices = []
+    list_of_dates = []
+    for lst in lists_of_tickets:
+        counter = 1
+        for lst1 in lst:
+            list_of_prices.append(int(lst1[0][:-1]))
+            list_of_dates.append(lst1[1].split(',')[0] + str(counter))
+            counter += 1
+            print(lst1)
+    plt.figure(figsize=(50, 5))
+    plt.scatter(list_of_dates, list_of_prices)
+    plt.grid(True)
+    plt.plot(list_of_dates, list_of_prices)
+    plt.show()
