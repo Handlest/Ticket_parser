@@ -1,11 +1,12 @@
 import datetime
 import time
-import schedule
+import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service as ChromeService
-from useful_funcs import form_dictionary, show_ticket_dict, get_date_for_url, generate_graph_from_dict
+from useful_funcs import form_dictionary, show_ticket_dict, get_date_for_url, generate_graph_from_dict, get_tickets, \
+    get_files_list
 
 # from_city = input("Пожалуйста, введите название города вылета в авиаформате (MOW - Москва, TOF - Томск)").upper()
 # to_city = input("Пожалуйста, введите название города назначения в авиаформате (MOW - Москва, TOF - Томск)").upper()
@@ -69,25 +70,21 @@ def start_parse():
         except:
             pass
         time.sleep(1)
-    # dictionary = form_dictionary()
-    # show_ticket_dict(dictionary)
-    # generate_graph_from_dict(dictionary)
 
 
 def main():
     #start_parse()
     show_ticket_dict(form_dictionary())
+    print(form_dictionary())
     generate_graph_from_dict(form_dictionary())
-
-    # schedule.every().day.at('00:34').do(start_parse)
-    # schedule.every().day.at('00:37').do(start_parse)
-    # while True:
-    #     schedule.run_pending()
-    #     time.sleep(1)
+    dataframe = pd.DataFrame()
+    for key, value in form_dictionary().items():
+        print(key)
+        dataframe = dataframe.append(value)
+    dataframe.columns = ['price', 'department', 'flightTime', 'arrival']
+    dataframe.index += 1
+    print(dataframe)
 
 
 if __name__ == "__main__":
     main()
-
-
-

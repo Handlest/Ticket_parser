@@ -1,17 +1,19 @@
 import pathlib
 import datetime
 import matplotlib.pyplot as plt
+import pandas as pd
 
 
+# Передаём словарь и получаем вывод в консоль
 def show_ticket_dict(dictionary):
     for key in dictionary:
         tmp = dictionary[key]  # Массив на 10 массивов внутри
         print(key, '\nБилет ', end='')
         print(*tmp, sep='\nБилет ')
         print()
-    print('*'*60)
+    print('*' * 60)
 
-
+# Проходимся по переданному списку файлов и убираем лишние символы в строках
 def refactor_files(list_of_files):
     for file in list_of_files:
         with open(file, 'r', encoding='utf-8') as f:
@@ -21,7 +23,7 @@ def refactor_files(list_of_files):
         with open(file, 'w', encoding='utf-8') as f:
             f.writelines(arr)
 
-
+# Формируем название для файлов
 def get_key_name(filename):
     filename = str(filename)
     filename = filename.split('_')
@@ -47,13 +49,13 @@ def get_tickets(filename):
                 counter += 1
             if '₽' in line:
                 ticket_list[counter].append(line.strip('\n'))  # Цена
-                flight_time = file.readline().strip('\n') # Время вылета
+                flight_time = file.readline().strip('\n')  # Время вылета
                 file.readline()
-                ticket_list[counter].append(file.readline().strip('\n') + ' ' + flight_time) # Дата вылета и время
-                ticket_list[counter].append(file.readline().strip('\n')) # Время в пути
-                flight_time = file.readline().strip('\n') # Время прибытия
+                ticket_list[counter].append(file.readline().strip('\n') + ' ' + flight_time)  # Дата вылета и время
+                ticket_list[counter].append(file.readline().strip('\n'))  # Время в пути
+                flight_time = file.readline().strip('\n')  # Время прибытия
                 file.readline()
-                ticket_list[counter].append(file.readline().strip('\n') + ' ' + flight_time) # Дата прибытия и время
+                ticket_list[counter].append(file.readline().strip('\n') + ' ' + flight_time)  # Дата прибытия и время
             line = file.readline()
     return ticket_list
 
@@ -92,3 +94,11 @@ def generate_graph_from_dict(dictionary: dict):
     plt.grid(True)
     plt.plot(list_of_dates, list_of_prices)
     plt.show()
+
+
+def create_dataframe():
+    tmp = []
+    for file in get_files_list():
+        tmp.extend(get_tickets(file))
+    dataframe = pd.DataFrame(tmp)
+    print(dataframe)
